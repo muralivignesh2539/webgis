@@ -95,12 +95,12 @@
   <!-- Popup form for issue reporting -->
   <div class="report-form" id="reportForm">
     <h3>Report a Problem</h3>
-    <form id="issueForm" action= "https://formspree.io/f/xrboodnp" method="POST">
+    <form id="issueForm">
       <input type="hidden" id="lat" name="Latitude" />
       <input type="hidden" id="lng" name="Longitude" />
 
       <label for="issueType">Issue Type:</label>
-      <select name="Issue Type" id="issueType" required>
+      <select id="issueType" required>
         <option value="">Select...</option>
         <option>Waste Disposal Issue</option>
         <option>Electric Post Failure</option>
@@ -110,13 +110,13 @@
       </select>
 
       <label for="description">Description:</label>
-      <textarea name="Description" id="description" rows="3" placeholder="Describe the issue..." required></textarea>
+      <textarea id="description" rows="3" placeholder="Describe the issue..." required></textarea>
 
       <label for="name">Your Name:</label>
-      <input type="text" name="Name" id="name" required />
+      <input type="text" id="name" required />
 
       <label for="email">Your Email (optional):</label>
-      <input type="email" name="Email" id="email" />
+      <input type="email" id="email" />
 
       <button type="submit">Submit</button>
       <button type="button" class="close-btn" onclick="closeForm()">Cancel</button>
@@ -124,6 +124,9 @@
   </div>
 
   <script>
+    // 🌍 Google Apps Script Web App URL
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzfjAQVGq81duA8ilGINMLLpMc8JawPUB-ScR_PksGT0nQc5IeW1HShfusTsYQgP8mww/exec";
+
     // Initialize map
     const map = L.map('map').setView([8.946, 76.574], 13);
 
@@ -135,7 +138,7 @@
 
     let marker;
 
-    // When user clicks map
+    // Show form on map click
     map.on('click', function (e) {
       const form = document.getElementById('reportForm');
       document.getElementById('lat').value = e.latlng.lat.toFixed(5);
@@ -153,12 +156,44 @@
       document.getElementById('reportForm').style.display = 'none';
     }
 
-    // Load existing issue reports from JSON
+    // Handle form submission
+    document.getElementById("issueForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const report = {
+        Latitude: document.getElementById("lat").value,
+        Longitude: document.getElementById("lng").value,
+        IssueType: document.getElementById("issueType").value,
+        Description: document.getElementById("description").value,
+        Name: document.getElementById("name").value,
+        Email: document.getElementById("email").value
+      };
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify(report)
+        });
+
+        alert("✅ Your report has been submitted successfully!");
+        closeForm();
+
+        L.marker([report.Latitude, report.Longitude]).addTo(map)
+          .bindPopup(`<b>${report.IssueType}</b><br>${report.Description}<br><small>Reported by: ${report.Name}</small>`)
+          .openPopup();
+      } catch (error) {
+        alert("❌ Error sending data. Please try again later.");
+        console.error(error);
+      }
+    });
+
+    // Load existing issue reports (optional if you store JSON)
     fetch('issues.json')
       .then(response => response.json())
       .then(data => {
         data.forEach(issue => {
-          const iconColor = getColor(issue["Issue Type"]);
+          const iconColor = getColor(issue.IssueType);
           const markerIcon = L.divIcon({
             className: "custom-icon",
             html: `<i style="background:${iconColor};width:14px;height:14px;display:inline-block;border-radius:50%;"></i>`,
@@ -168,7 +203,7 @@
           L.marker([issue.Latitude, issue.Longitude], { icon: markerIcon })
             .addTo(map)
             .bindPopup(`
-              <b>${issue["Issue Type"]}</b><br>
+              <b>${issue.IssueType}</b><br>
               ${issue.Description}<br>
               <small>Reported by: ${issue.Name}</small>
             `);
@@ -176,7 +211,7 @@
       })
       .catch(err => console.log('No existing issues found yet.'));
 
-    // Color by issue type
+    // Marker colors by issue type
     function getColor(type) {
       switch (type) {
         case "Waste Disposal Issue": return "#e74c3c";
@@ -187,7 +222,7 @@
       }
     }
 
-    // Add a simple legend
+    // Add legend
     const legend = L.control({position: 'bottomleft'});
     legend.onAdd = function () {
       const div = L.DomUtil.create('div', 'legend');
