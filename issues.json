@@ -1,0 +1,17 @@
+[
+  {
+    "Latitude": 8.9465,
+    "Longitude": 76.5732,
+    "Issue Type": "Waste Disposal Issue",
+    "Description": "Garbage accumulation near the ferry station.",
+    "Name": "Arun"
+  },
+  {
+    "Latitude": 8.9481,
+    "Longitude": 76.5750,
+    "Issue Type": "Electric Post Failure",
+    "Description": "Street light not working near temple road.",
+    "Name": "Nisha"
+  }
+]
+

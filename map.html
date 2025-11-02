@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panchayath Interactive Map - Thekkumbhagom</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+
+    .report-form {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 999;
+      display: none;
+      width: 320px;
+    }
+
+    .report-form h3 {
+      margin-top: 0;
+      color: #0a4d8c;
+    }
+
+    .report-form label {
+      display: block;
+      margin-top: 0.5rem;
+      font-weight: bold;
+    }
+
+    .report-form input, .report-form select, .report-form textarea {
+      width: 100%;
+      padding: 6px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 3px;
+    }
+
+    .report-form button {
+      background: #0a4d8c;
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 5px;
+      margin-top: 0.8rem;
+      cursor: pointer;
+    }
+
+    .report-form button:hover {
+      background: #0c63b3;
+    }
+
+    .close-btn {
+      background: #ccc;
+      color: black;
+      margin-left: 10px;
+    }
+
+    .legend {
+      background: white;
+      padding: 10px;
+      line-height: 1.5;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    }
+
+    .legend i {
+      width: 16px;
+      height: 16px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <!-- Popup form for issue reporting -->
+  <div class="report-form" id="reportForm">
+    <h3>Report a Problem</h3>
+    <form id="issueForm">
+      <input type="hidden" id="lat" name="Latitude" />
+      <input type="hidden" id="lng" name="Longitude" />
+
+      <label for="issueType">Issue Type:</label>
+      <select id="issueType" required>
+        <option value="">Select...</option>
+        <option>Waste Disposal Issue</option>
+        <option>Electric Post Failure</option>
+        <option>Water Supply Problem</option>
+        <option>Road Damage</option>
+        <option>Other</option>
+      </select>
+
+      <label for="description">Description:</label>
+      <textarea id="description" rows="3" placeholder="Describe the issue..." required></textarea>
+
+      <label for="name">Your Name:</label>
+      <input type="text" id="name" required />
+
+      <label for="email">Your Email (optional):</label>
+      <input type="email" id="email" />
+
+      <button type="submit">Submit</button>
+      <button type="button" class="close-btn" onclick="closeForm()">Cancel</button>
+    </form>
+  </div>
+
+  <script>
+    // 🌍 Google Apps Script Web App URL
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzfjAQVGq81duA8ilGINMLLpMc8JawPUB-ScR_PksGT0nQc5IeW1HShfusTsYQgP8mww/exec";
+
+    // Initialize map
+    const map = L.map('map').setView([8.946, 76.574], 13);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let marker;
+
+    // Show form on map click
+    map.on('click', function (e) {
+      const form = document.getElementById('reportForm');
+      document.getElementById('lat').value = e.latlng.lat.toFixed(5);
+      document.getElementById('lng').value = e.latlng.lng.toFixed(5);
+      form.style.display = 'block';
+
+      if (marker) {
+        map.removeLayer(marker);
+      }
+      marker = L.marker(e.latlng).addTo(map)
+        .bindPopup("Selected Location for Issue Report").openPopup();
+    });
+
+    function closeForm() {
+      document.getElementById('reportForm').style.display = 'none';
+    }
+
+    // Handle form submission
+    document.getElementById("issueForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const report = {
+        Latitude: document.getElementById("lat").value,
+        Longitude: document.getElementById("lng").value,
+        IssueType: document.getElementById("issueType").value,
+        Description: document.getElementById("description").value,
+        Name: document.getElementById("name").value,
+        Email: document.getElementById("email").value
+      };
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify(report)
+        });
+
+        alert("✅ Your report has been submitted successfully!");
+        closeForm();
+
+        L.marker([report.Latitude, report.Longitude]).addTo(map)
+          .bindPopup(`<b>${report.IssueType}</b><br>${report.Description}<br><small>Reported by: ${report.Name}</small>`)
+          .openPopup();
+      } catch (error) {
+        alert("❌ Error sending data. Please try again later.");
+        console.error(error);
+      }
+    });
+
+    // Load existing issue reports (optional if you store JSON)
+    fetch('issues.json')
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(issue => {
+          const iconColor = getColor(issue.IssueType);
+          const markerIcon = L.divIcon({
+            className: "custom-icon",
+            html: `<i style="background:${iconColor};width:14px;height:14px;display:inline-block;border-radius:50%;"></i>`,
+            iconSize: [14, 14]
+          });
+
+          L.marker([issue.Latitude, issue.Longitude], { icon: markerIcon })
+            .addTo(map)
+            .bindPopup(`
+              <b>${issue.IssueType}</b><br>
+              ${issue.Description}<br>
+              <small>Reported by: ${issue.Name}</small>
+            `);
+        });
+      })
+      .catch(err => console.log('No existing issues found yet.'));
+
+    // Marker colors by issue type
+    function getColor(type) {
+      switch (type) {
+        case "Waste Disposal Issue": return "#e74c3c";
+        case "Electric Post Failure": return "#f1c40f";
+        case "Water Supply Problem": return "#3498db";
+        case "Road Damage": return "#9b59b6";
+        default: return "#2ecc71";
+      }
+    }
+
+    // Add legend
+    const legend = L.control({position: 'bottomleft'});
+    legend.onAdd = function () {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <strong>Issue Types</strong><br>
+        <i style="background:#e74c3c"></i> Waste Disposal<br>
+        <i style="background:#f1c40f"></i> Electric Post<br>
+        <i style="background:#3498db"></i> Water Supply<br>
+        <i style="background:#9b59b6"></i> Road Damage<br>
+        <i style="background:#2ecc71"></i> Other
+      `;
+      return div;
+    };
+    legend.addTo(map);
+  </script>
+</body>
+</html>
+
+
