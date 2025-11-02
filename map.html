@@ -171,9 +171,9 @@
 
       try {
         await fetch(GOOGLE_SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          body: JSON.stringify(report)
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify(report)
         });
 
         alert("✅ Your report has been submitted successfully!");
@@ -240,6 +240,7 @@
   </script>
 </body>
 </html>
+
 
 
 
