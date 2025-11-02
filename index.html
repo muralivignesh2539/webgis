@@ -6,146 +6,116 @@
   <title>Panchayath Information System - Thekkumbhagom Grama Panchayath</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Segoe UI", sans-serif;
       margin: 0;
-      background-color: #f5f7fa;
+      padding: 0;
+      background-color: #f7f9fb;
       color: #333;
-      line-height: 1.6;
     }
-
     header {
-      background-color: #0a4d8c;
+      background-color: #00796b;
       color: white;
+      padding: 1.5em;
       text-align: center;
-      padding: 2rem 1rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
     section {
-      background: white;
-      margin-bottom: 2rem;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 2em;
+      max-width: 900px;
+      margin: auto;
     }
-
     h2 {
-      color: #0a4d8c;
-      margin-top: 0;
+      color: #00796b;
+      border-bottom: 2px solid #00796b;
+      padding-bottom: 5px;
     }
-
-    p {
-      margin-bottom: 1rem;
-    }
-
-    ul {
-      margin: 0 0 1rem 1.5rem;
-    }
-
-    a.button {
+    a.map-link {
       display: inline-block;
-      background-color: #0a4d8c;
+      background-color: #00796b;
       color: white;
+      padding: 0.8em 1.5em;
       text-decoration: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 5px;
-      transition: background 0.3s;
+      border-radius: 6px;
+      margin-top: 20px;
     }
-
-    a.button:hover {
-      background-color: #0c63b3;
+    a.map-link:hover {
+      background-color: #004d40;
     }
-
     footer {
       text-align: center;
-      padding: 1.5rem;
-      background-color: #e9eef4;
-      color: #333;
-      border-top: 1px solid #ccc;
+      background-color: #004d40;
+      color: white;
+      padding: 1em;
+      margin-top: 40px;
     }
-
     .feedback {
-      text-align: center;
-    }
-
-    .feedback a {
-      color: #0a4d8c;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    .feedback a:hover {
-      text-decoration: underline;
+      background: #e0f2f1;
+      border-left: 4px solid #00796b;
+      padding: 1em;
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Panchayath Information System - Thekkumbhagom Grama Panchayath</h1>
-  </header>
+<header>
+  <h1>Panchayath Information System</h1>
+  <h3>Thekkumbhagom Grama Panchayath</h3>
+</header>
 
-  <main>
-    <section id="about">
-      <h2>About Thekkumbhagom</h2>
-      <p>
-        Chavara Thekkumbhagom, also known as Chavara South, is an island village located in the Kollam District of Kerala, India.
-        It lies about 10 km from Kollam City and is surrounded by the serene Ashtamudi Lake, close to the coast of the Indian Ocean.
-      </p>
-    </section>
-<img src="https://www.bing.com/images/search?view=detailV2&ccid=N95RaXcB&id=CA457F07AC6A5C8985082E635D24F7974981798B&thid=OIP.N95RaXcBClysK7YVDgYzbQHaEz&mediaurl=https%3a%2f%2fwww.digitalkeralam.com%2fpageimgs%2fdigitalkeralam_page_1000797_img.jpg&exph=519&expw=800&q=chavara+thekkumbhagom&FORM=IRPRST&ck=0F9FB961AB5F53269847047D802CF020&selectedIndex=23&itb=0">
-    <section id="panchayath-system">
-      <h2>Panchayath Information System</h2>
-      <p>
-        This portal is your digital guide to the Thekkumbhagom Grama Panchayath. 
-        We have developed this comprehensive information system to promote transparency and enable data-driven planning for our community.
-      </p>
+<section>
+  <h2>About Thekkumbhagom</h2>
+  <p>Chavara Thekkumbhagom (or Chavara South) is an island village in Kollam District, Kerala, located about 10 km from Kollam city. The region is surrounded by the scenic Ashtamudi Lake and lies near the coast of the Indian Ocean, making it a unique blend of land and water ecosystems.</p>
 
-      <p>Here, you can explore interactive maps that show the core components of our Panchayath, including:</p>
+  <h2>About the Panchayath Information System</h2>
+  <p>This portal is your digital guide to the Thekkumbhagom Grama Panchayath. We have developed this comprehensive information system to promote transparency and enable data-driven planning for our community.</p>
+  
+  <p>Here, you can explore interactive maps that display the core components of our Panchayath, including:</p>
+  <ul>
+    <li><strong>Public Services:</strong> Schools and Hospitals</li>
+    <li><strong>Our Community:</strong> Population distribution</li>
+    <li><strong>Economy & Recreation:</strong> Tourism and leisure spots</li>
+    <li><strong>Our Land:</strong> Slope, relief, and elevation (DEM)</li>
+    <li><strong>Boundaries:</strong> Administrative boundaries of our Panchayath</li>
+  </ul>
 
-      <ul>
-        <li><strong>Public Services:</strong> Locations of all Schools and Hospitals.</li>
-        <li><strong>Our Community:</strong> Detailed Population Distribution.</li>
-        <li><strong>Economy & Recreation:</strong> Key Tourism and Leisure spots.</li>
-        <li><strong>Our Land:</strong> The physical geography of our area, including Elevation (DEM).</li>
-        <li><strong>Boundaries:</strong> The official Administrative Boundary of our Panchayath.</li>
-      </ul>
+  <p>This tool helps us understand our community’s needs, manage resources effectively, and plan for sustainable development. We invite you to explore the interactive map below.</p>
 
-      <p>
-        This tool helps us understand our community's needs, manage our resources effectively, and plan for sustainable development.
-        We invite you to explore the map and learn more about our home.
-      </p>
+  <center><a href="https://muralivignesh2539.github.io/THEKKUMBHAGOM-GRAMAPANCHAYATH-INFORMATION-SYSTEM/" class="map-link">🌍 Open Panchayath Resource Map</a></center>
+<p style="text-align: center; margin-top: 2rem;">
+  <a href="map.html" target="_blank" class="map-button">🗺️ Open Interactive Panchayath Map</a>
+</p>
 
-      <p style="text-align: center;">
-        <a href="https://muralivignesh2539.github.io/THEKKUMBHAGOM-GRAMAPANCHAYATH-INFORMATION-SYSTEM/" target="_blank" class="button">🔗 View Panchayath Resource Map on GitHub</a>
-      </p>
-    </section>
+<style>
+  .map-button {
+    display: inline-block;
+    background-color: #1d72b8; /* Deep Blue */
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 0.8rem 1.6rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+  }
 
-    <section id="feedback" class="feedback">
-      <h2>Feedback & Suggestions</h2>
-      <p>We welcome your feedback and suggestions to improve this system.</p>
-      <p>
-        Send your feedback to: 
-        <a href="mailto:abhirammurali537@gmail.com">abhirammurali537@gmail.com</a>
-      </p>
-    </section>
-  </main>
+  .map-button:hover {
+    background-color: #155d8b; /* Darker blue on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  }
+</style>
+<center>
+  <div class="feedback">
+    <h3>Feedback</h3>
+    <p>We welcome your suggestions and feedback. Please write to us at:</p>
+    <p><a href="mailto:abhirammurali537@gmail.com">abhirammurali537@gmail.com</a></p></center>
+  </div>
+</section>
 
-  <footer>
-    <p>© 2025 Thekkumbhagom Grama Panchayath | Panchayath Information System</p>
-  </footer>
+<footer>
+  © 2025 Thekkumbhagom Grama Panchayath | Developed by Abhiram Murali
+</footer>
 
 </body>
 </html>
-
